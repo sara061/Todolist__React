@@ -1,9 +1,10 @@
-import { Button } from "./Button";
+import {Button} from './Button';
 
 type Props = {
-  title: string;
-  tasks: Task[];
-  date?: string;
+  title: string,
+  tasks: Task[],
+  date?: string,
+  deleteTask: (taskId: number) => void
 };
 
 export type Task = {
@@ -13,7 +14,7 @@ export type Task = {
 };
 
 export const TodoListItem = (props: Props) => {
-  const { title, tasks, date } = props;
+  const {title, tasks, date, deleteTask} = props;
 
   return (
     <div>
@@ -43,6 +44,7 @@ export const TodoListItem = (props: Props) => {
               <li key={task.id}>
                 <input type="checkbox" checked={task.isDone} />
                 <span>{task.title}</span>
+                <button style={{marginLeft: '5px', borderRadius: '5px'}} onClick={() => deleteTask(task.id)}>x</button>
               </li>
             );
           })}
@@ -50,9 +52,9 @@ export const TodoListItem = (props: Props) => {
       )}
 
       <div>
-        <Button title={"All"} />
-        <Button title={"Active"} />
-        <Button title={"Completed"} />
+        <Button title={'All'} />
+        <Button title={'Active'} />
+        <Button title={'Completed'} />
       </div>
       <div>{date}</div>
     </div>
