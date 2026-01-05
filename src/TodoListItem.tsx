@@ -5,7 +5,7 @@ type Props = {
   title: string,
   tasks: Task[],
   date?: string,
-  deleteTask: (taskId: number) => void
+  deleteTask: (taskId: string) => void
   changeFilter: (filter: FilterValues) => void
 };
 
