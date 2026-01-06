@@ -1,5 +1,7 @@
 import {Button} from './Button';
 import {FilterValues, Task} from './App.tsx';
+import {ChangeEvent, useState, KeyboardEvent} from 'react';
+// import {useRef} from 'react';
 
 type Props = {
   title: string,
@@ -7,19 +9,42 @@ type Props = {
   date?: string,
   deleteTask: (taskId: string) => void
   changeFilter: (filter: FilterValues) => void
-    createTask: () => void
+    createTask: (title: string) => void
 };
 
 
 export const TodoListItem = (props: Props) => {
   const {title, tasks, date, deleteTask, changeFilter, createTask} = props;
+const [taskTitle, setTaskTitle] = useState('')
 
-  return (
+      // const inputRef= useRef<HTMLInputElement>(null) инпут с юзрефом
+// Создание таски с помощью useState
+ const createTaskHandler = () =>    {
+     createTask(taskTitle)
+     setTaskTitle('')
+ }
+
+ //изменение значения инпута
+    const changeTaskTitleHandler = (event: ChangeEvent<HTMLInputElement>) => {
+    setTaskTitle(event.currentTarget.value)
+    }
+
+    const onKeyTaskTitleHandler = (event: KeyboardEvent<HTMLInputElement>) => {
+        if(event.key ==='Enter') {
+            createTaskHandler()
+        }}
+    return (
     <div>
       <h3>{title}</h3>
       <div>
-        <input />
-        <button onClick={createTask}>+</button>
+        <input /*ref = {inputRef}*/ value={taskTitle}
+                                    onChange={changeTaskTitleHandler}
+                                    onKeyDown={onKeyTaskTitleHandler}
+        />
+          <Button
+              title={'+'}
+              onClick={createTaskHandler}
+          />
       </div>
       {tasks.length === 0 ? (
         <p>Тасок нет</p>
