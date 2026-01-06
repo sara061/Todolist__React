@@ -41,7 +41,12 @@ export const App = () => {
   if (filter === 'completed') {
     filteredTasks = tasks.filter(task => task.isDone)
   }
-
+  // Создание таски
+ const createTask = () => {
+    const newTask = { id: v1(), title: 'New Task', isDone: false}
+   const newTasks = [newTask, ... tasks]
+   setTasks(newTasks)
+  }
 
   return (
     <div className="app">
@@ -50,6 +55,7 @@ export const App = () => {
         tasks={filteredTasks}
         deleteTask={deleteTask}
         changeFilter={changeFilter}
+        createTask={createTask}
       />
     </div>
   )
