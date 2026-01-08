@@ -48,6 +48,15 @@ export const App = () => {
    setTasks(newTasks)
   }
 
+  // Изменение чекбокса
+
+  const changeTaskStatus = (taskId: string, isDone: boolean) => {
+ const task = tasks.find(t => t.id === taskId)
+      if(task) {
+          task.isDone = isDone
+          setTasks([...tasks])
+      }
+  }
   return (
     <div className="app">
       <TodoListItem
@@ -56,6 +65,7 @@ export const App = () => {
         deleteTask={deleteTask}
         changeFilter={changeFilter}
         createTask={createTask}
+        changeTaskStatus={changeTaskStatus}
       />
     </div>
   )
