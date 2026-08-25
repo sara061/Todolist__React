@@ -3,6 +3,11 @@
   display: flex;
 }
 
+.container {
+  display: flex;
+  align-items: center;
+}
+
 .app > div {
   margin-right: 50px;
 }

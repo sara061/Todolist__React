@@ -1,40 +1,43 @@
 import {Button} from './Button';
-import {FilterValues, Task, Todolist} from './App.tsx';
+import {FilterValues, Task, todolist} from './App.tsx';
 import {ChangeEvent, useState, KeyboardEvent} from 'react';
 // import {useRef} from 'react';
 
 type Props = {
-
-    todolist: Todolist
+    todolist: todolist
     tasks: Task[],
     date?: string,
-    deleteTask: (taskId: string) => void
+    deleteTask: (todolistId: string, taskId: string) => void
     changeFilter: (todolistId: string, filter: FilterValues) => void
-    createTask: (title: string) => void
-    changeTaskStatus: (taskId: string, isDone: boolean) => void
-
+    createTask: (todolistId: string, title: string) => void
+    changeTaskStatus: (todolistId: string,taskId: string, isDone: boolean) => void
+    deleteTodolist: (todolistId: string) => void
 };
 
 
 export const TodoListItem = (props: Props) => {
-    const {todolist:{id, title, filter},
-         tasks,
+    const {
+        todolist: {id, title, filter},
+        tasks,
         date,
         deleteTask,
         changeFilter,
         createTask,
-        changeTaskStatus} = props;
+        changeTaskStatus,
+        deleteTodolist} = props;
     const [taskTitle, setTaskTitle] = useState('')
     const [error, setError] = useState<string | null>(null)
     // const inputRef= useRef<HTMLInputElement>(null) инпут с юзрефом
-// Создание таски с помощью useState
+
+
+    // Создание таски с помощью useState
 
     const createTaskHandler = () => {
         const trimmedTitle = taskTitle.trim()
-
+        
 
         if(trimmedTitle !== ''){
-            createTask(trimmedTitle)
+            createTask(trimmedTitle, id)
             setTaskTitle('')
         } else {
             setError('Title  is required')
@@ -54,10 +57,32 @@ export const TodoListItem = (props: Props) => {
         }
     }
 
-    const changeFilterHandler = (filter: FilterValues) => changeFilter(id, filter)
+  
+    const changeFilterHandler = (filter: FilterValues) => {
+        changeFilter(id, filter)
+    }
+
+    const deleteTaskHandler = (taskId: string) => {
+        deleteTask(id, taskId)
+    }
+
+    const changeTaskStatusHandler = (todolistId: string, taskId: string, isDone: boolean) => {
+        changeTaskStatus(todolistId, taskId, isDone)
+    }
+
+    const deleteTodolistHandler= () => {
+        deleteTodolist(id)
+    }
+
     return (
         <div>
-            <h3>{title}</h3>
+            
+
+            <div className={"container"}>
+                <h3>{title}</h3>
+                <Button title={'x'} onClick={deleteTodolistHandler} />
+            </div>
+
             <div>
                 <input /*ref = {inputRef}*/ value={taskTitle}
                                             onChange={changeTaskTitleHandler}
@@ -87,11 +112,17 @@ export const TodoListItem = (props: Props) => {
         </li> */}
 
                     {tasks.map((task) => {
+                        const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+                                changeTaskStatusHandler(id, task.id, e.currentTarget.checked);
+                        };
                         return (
                             <li key={task.id} className={task.isDone ? 'is-done' : ''}>
-                                <input type="checkbox" checked={task.isDone} onChange={(e) =>changeTaskStatus(task.id, e.target.checked)}/>
+                                <input 
+                                type="checkbox" 
+                                checked={task.isDone} 
+                                onChange={onChangeHandler}/>
                                 <span>{task.title}</span>
-                                <Button title={'x'} onClick={() => deleteTask(task.id)}/>
+                                <Button title={'x'} onClick={() => deleteTaskHandler(task.id)}/>
                             </li>
                         );
                     })}
